@@ -1,5 +1,5 @@
 
-# Event App - Golang
+# 🎉 Event App - Golang
 
 Developed an event management application using **Golang** and **PostgreSQL**, deployed on Render and **Railway**. The app features user authentication with **JWT tokens**. To ensure proper access control, I implemented middleware to verify tokens for authorization. Users can create, update, and delete events while also being able to fetch all events or retrieve a single event by its ID. For database management, I utilized **Supabase** to handle the PostgreSQL cloud URL, allowing users to register for or cancel their participation in events seamlessly. This project showcases my ability to integrate various technologies to deliver a functional and user-friendly application.
 
@@ -20,12 +20,12 @@ Developed an event management application using **Golang** and **PostgreSQL**, d
 ## Demo
 
 **Deployed URL:**
-- [Railway Deployment](https://nevil-golang-event.up.railway.app/events)
-- [Render Deployment](https://event-golang.onrender.com/events)
+- https://nevil-golang-event.up.railway.app/events
+- https://event-golang.onrender.com/events
 
 **Swagger:**
-- [Railway Swagger](https://nevil-golang-event.up.railway.app/swagger/index.html)
-- [Render Swagger](https://event-golang.onrender.com/swagger/index.html)
+- https://nevil-golang-event.up.railway.app/swagger/index.html
+- https://event-golang.onrender.com/swagger/index.html
 
 
 **Postman Collection:**
