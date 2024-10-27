@@ -1,0 +1,331 @@
+definitions:
+  example_com_rest-api_models.Event:
+    description: Event struct for the event management system
+    properties:
+      dateTime:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      location:
+        type: string
+      name:
+        type: string
+      userID:
+        type: integer
+    required:
+    - dateTime
+    - description
+    - location
+    - name
+    type: object
+  example_com_rest-api_models.User:
+    description: User struct for user management
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  routes.ErrorResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  routes.EventResponse:
+    properties:
+      event:
+        $ref: '#/definitions/example_com_rest-api_models.Event'
+      message:
+        type: string
+    type: object
+  routes.LoginResponse:
+    properties:
+      message:
+        type: string
+      token:
+        type: string
+    type: object
+  routes.MessageResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  routes.ResponseMessage:
+    properties:
+      message:
+        type: string
+    type: object
+  routes.SignupResponse:
+    properties:
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /events:
+    get:
+      description: Retrieve a list of all events
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/example_com_rest-api_models.Event'
+            type: array
+        "500":
+          description: Something went wrong
+          schema:
+            $ref: '#/definitions/routes.ErrorResponse'
+      summary: Get all events
+      tags:
+      - events
+    post:
+      description: Create a new event
+      parameters:
+      - description: Event data
+        in: body
+        name: event
+        required: true
+        schema:
+          $ref: '#/definitions/example_com_rest-api_models.Event'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Event created successfully
+          schema:
+            $ref: '#/definitions/routes.EventResponse'
+        "400":
+          description: Invalid request data
+          schema:
+            $ref: '#/definitions/routes.ErrorResponse'
+        "500":
+          description: Something went wrong
+          schema:
+            $ref: '#/definitions/routes.ErrorResponse'
+      summary: Create a new event
+      tags:
+      - events
+  /events/{id}:
+    delete:
+      description: Delete an event by its ID
+      parameters:
+      - description: Event ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Event deleted successfully
+          schema:
+            $ref: '#/definitions/routes.MessageResponse'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/routes.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/routes.ErrorResponse'
+        "500":
+          description: Something went wrong
+          schema:
+            $ref: '#/definitions/routes.ErrorResponse'
+      summary: Delete an existing event
+      tags:
+      - events
+    get:
+      description: Retrieve an event by its ID
+      parameters:
+      - description: Event ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/example_com_rest-api_models.Event'
+        "400":
+          description: Invalid ID
+          schema:
+            $ref: '#/definitions/routes.ErrorResponse'
+        "500":
+          description: Something went wrong
+          schema:
+            $ref: '#/definitions/routes.ErrorResponse'
+      summary: Get event by ID
+      tags:
+      - events
+    put:
+      description: Update an event by its ID
+      parameters:
+      - description: Event ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated event data
+        in: body
+        name: event
+        required: true
+        schema:
+          $ref: '#/definitions/example_com_rest-api_models.Event'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Event updated successfully
+          schema:
+            $ref: '#/definitions/routes.MessageResponse'
+        "400":
+          description: Invalid ID or request data
+          schema:
+            $ref: '#/definitions/routes.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/routes.ErrorResponse'
+        "500":
+          description: Something went wrong
+          schema:
+            $ref: '#/definitions/routes.ErrorResponse'
+      summary: Update an existing event
+      tags:
+      - events
+  /events/{id}/cancel:
+    delete:
+      description: Cancel the registration of a user for a specific event using the
+        event ID
+      parameters:
+      - description: Event ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/routes.ResponseMessage'
+        "400":
+          description: Could not parse event id.
+          schema:
+            $ref: '#/definitions/routes.ResponseMessage'
+        "500":
+          description: Could not cancel registration.
+          schema:
+            $ref: '#/definitions/routes.ResponseMessage'
+      summary: Cancel registration for an event
+      tags:
+      - events
+  /events/{id}/register:
+    post:
+      description: Register a user for a specific event using the event ID
+      parameters:
+      - description: Event ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/routes.ResponseMessage'
+        "400":
+          description: Could not parse event id.
+          schema:
+            $ref: '#/definitions/routes.ResponseMessage'
+        "500":
+          description: Could not register user for event.
+          schema:
+            $ref: '#/definitions/routes.ResponseMessage'
+      summary: Register user for an event
+      tags:
+      - events
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Log in a user and generate a token
+      parameters:
+      - description: User login information
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/example_com_rest-api_models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/routes.LoginResponse'
+        "400":
+          description: Could not parse request data.
+          schema:
+            $ref: '#/definitions/routes.SignupResponse'
+        "401":
+          description: Could not authenticate user.
+          schema:
+            $ref: '#/definitions/routes.SignupResponse'
+        "500":
+          description: Could not authenticate user.
+          schema:
+            $ref: '#/definitions/routes.SignupResponse'
+      summary: Authenticate a user
+      tags:
+      - users
+  /signup:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user with the provided data
+      parameters:
+      - description: User information
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/example_com_rest-api_models.User'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/routes.SignupResponse'
+        "400":
+          description: Could not parse request data.
+          schema:
+            $ref: '#/definitions/routes.SignupResponse'
+        "500":
+          description: Could not save user.
+          schema:
+            $ref: '#/definitions/routes.SignupResponse'
+      summary: Create a new user
+      tags:
+      - users
+swagger: "2.0"
